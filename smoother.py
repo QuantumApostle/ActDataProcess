@@ -65,19 +65,6 @@ def dynamicAcc(rawData, staticAcc, fileName):
 
 	return dAcc	
 
-#calculate ODBA
-#by sum up the dynamic acceleration
-def oDBA(dAcc, fileName):
-	dataType = "ODBA"
-	print "ODBA calculation starts"
-	ODBA = []
-	for dataSet in dAcc:
-		ODBA.append([abs(dataSet[0]) + abs(dataSet[1]) + abs(dataSet[2]), dataSet[3]])
-	
-	print "ODBA calculation finishes"
-	exportToFile(fileName, dataType, ODBA)
-	return ODBA
-
 #export data to file
 def exportToFile(fileName, dataType, data):
 	print dataType + " exported starts."
@@ -94,9 +81,8 @@ def exportToFile(fileName, dataType, data):
 if __name__ == "__main__":
 	fileName = ""
 	for file in os.listdir("."):
-		if "dat" in str(file):
+		if "_extracted.dat" in str(file):
 			fileName = str(file)
 	rawData = readData(fileName)
 	sAcc = staticAcc(rawData, fileName)
 	dAcc = dynamicAcc(rawData, sAcc, fileName)
-	ODBA = oDBA(dAcc, fileName)

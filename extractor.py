@@ -2,6 +2,9 @@ import json
 import os
 
 def extractData(fileName):
+	
+	print "Data Extraction Starts"
+
 	dataFile = open(fileName, "r")
 	extractData = []
 	lines = dataFile.readlines()
@@ -21,6 +24,7 @@ def extractData(fileName):
 	return extractData
 
 def writeFile(newData, extractedFileName):
+	print "Data Export Starts"
 	newDataFile = open(extractedFileName, 'w')
 	
 	for data in newData:
