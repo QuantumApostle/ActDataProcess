@@ -118,14 +118,16 @@ def exportToFile(fileName, dataType, data):
 	printLocalTime()
 	 
 if __name__ == "__main__":
-	fileName = ""
-	for file in os.listdir("."):
-		if "txt" in str(file):
-			fileName = str(file)
-	rawData = extractData(fileName)
-	sAcc = staticAcc(rawData, fileName)
-	dAcc = dynamicAcc(rawData, sAcc, fileName)
-	ODBA = oDBA(dAcc, fileName)
-
+        startTime = time.time()
+        fileName = ""
+        for file in os.listdir("."):
+                if "txt" in str(file):
+                        fileName = str(file)
+        rawData = extractData(fileName)
+        sAcc = staticAcc(rawData, fileName)
+        dAcc = dynamicAcc(rawData, sAcc, fileName)
+        ODBA = oDBA(dAcc, fileName)
+        finishTime = time.time()
+        print "total time duration:\t", finishTime - startTime
 #       writeJsonFile(newData, extractedFileName)
 
