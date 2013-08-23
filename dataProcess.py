@@ -1,9 +1,15 @@
 import json
 import os
+import time
+
+def printLocalTime():
+        localTime = time.asctime(time.localtime(time.time()))
+        print "\t\t\t\t\t\t\t", localTime
 
 #Extract acceleration data from file
 def extractData(fileName):
 	print "Data Extraction begins"
+	printLocalTime()
 	dataFile = open(fileName, "r")
 	extractData = []
 	dataType = "extract_data"
@@ -21,6 +27,7 @@ def extractData(fileName):
 		dataPoint = acc + timeStamp
 		extractData.append(dataPoint)
 	print "Data Extraction finishes"
+	printLocalTime()
 	exportToFile(fileName, dataType, extractData)
 	return extractData
 
@@ -34,7 +41,7 @@ def writeJsonFile(newData, extractedFileName):
 #by averaging data in 2 seconds
 def staticAcc(rawData, fileName):
 	print "Static acceleration calculation starts"
-	
+	printLocalTime()
 	dataType = "sAcc"
 	meanRange = 80     #2 seconds
 	sAcc = []
@@ -55,6 +62,7 @@ def staticAcc(rawData, fileName):
 		sAcc.append([meanX, meanY, meanZ, timeStamp])
 	
 	print "Static acceleration calculation finishes"
+	printLocalTime()
 	exportToFile(fileName, dataType, sAcc)
 	
 	return sAcc
@@ -64,6 +72,7 @@ def staticAcc(rawData, fileName):
 #of difference between rawData and static Acc
 def dynamicAcc(rawData, staticAcc, fileName):
 	print "Dynamic acceleration calculation starts"
+	printLocalTime()
 	dAcc = []
 	dataType = "dAcc"
 	for i in range(len(staticAcc)):
@@ -73,6 +82,7 @@ def dynamicAcc(rawData, staticAcc, fileName):
 		dAcc.append([dAccX, dAccY, dAccZ, staticAcc[i][3]])
 	
 	print "Dynamic acceleration calculation finishes"
+	printLocalTime()
 	exportToFile(fileName, dataType, dAcc)
 
 	return dAcc	
@@ -82,17 +92,20 @@ def dynamicAcc(rawData, staticAcc, fileName):
 def oDBA(dAcc, fileName):
 	dataType = "ODBA"
 	print "ODBA calculation starts"
+	printLocalTime()
 	ODBA = []
 	for dataSet in dAcc:
 		ODBA.append([abs(dataSet[0]) + abs(dataSet[1]) + abs(dataSet[2]), dataSet[3]])
 	
 	print "ODBA calculation finishes"
+	printLocalTime()
 	exportToFile(fileName, dataType, ODBA)
 	return ODBA
 
 #export data to file
 def exportToFile(fileName, dataType, data):
 	print dataType + " exported starts."
+	printLocalTime()
 	
 	newFileName = fileName[:-4] + "_" + dataType + ".dat"
 	newFile = open(newFileName, "w")
@@ -102,6 +115,7 @@ def exportToFile(fileName, dataType, data):
 			newFile.write(str(value) + " ")
 		newFile.write('\n')
 	print dataType + " exported finishes."
+	printLocalTime()
 	 
 if __name__ == "__main__":
 	fileName = ""
