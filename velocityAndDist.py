@@ -9,7 +9,7 @@ def printLocalTime():
 
 #read dynamic acceleration data from file
 def readData(fileName):
-	print "Data reading begins"
+	print "Data reading begins."
 	printLocalTime()
 	dataFile = open(fileName, "r")
 	rawData = []
@@ -21,14 +21,14 @@ def readData(fileName):
 		for value in dataLine:
 			dataSet.append(float(value))
 		rawData.append(dataSet)
-	print "Data reading finishes"
+	print "Data reading finishes."
 	printLocalTime()
 	return rawData
 
 #calculate the velocity
 def velocityCalculation(dAcc, fileName):
 	dataType = "Velocity"
-	print "Velocity calculation starts"
+	print "Velocity calculation starts."
 	printLocalTime()
 	velocity = []
 	vX = 0
@@ -44,7 +44,7 @@ def velocityCalculation(dAcc, fileName):
 		velocity.append([vX, vY, vZ, t])
 	
 	#print velocity[1:100]
-	print "Velocity calculation finishes"
+	print "Velocity calculation finishes."
 	printLocalTime()
 	exportToFile(fileName, dataType, velocity)
 	return velocity
@@ -52,7 +52,7 @@ def velocityCalculation(dAcc, fileName):
 #calculate the distance
 def distCalculation(velocity, fileName):
 	dataType = "Dist"
-	print "Distance calculation starts"
+	print "Distance calculation starts."
 	printLocalTime()
 	dist = []
 	dX = 0
@@ -68,7 +68,7 @@ def distCalculation(velocity, fileName):
 		dist.append([dX, dY, dZ, t])
 	
 	#print dist[1:100]
-	print "Distance calculation finishes"
+	print "Distance calculation finishes."
 	printLocalTime()
 	exportToFile(fileName, dataType, dist)
 	return velocity
@@ -84,7 +84,7 @@ def exportToFile(fileName, dataType, data):
 		for value in dataSet:
 			newFile.write(str(value) + " ")
 		newFile.write('\n')
-	print dataType + "exported finishes."
+	print dataType + " exported finishes."
 	printLocalTime()
 
 if __name__ == "__main__":
@@ -97,7 +97,7 @@ if __name__ == "__main__":
 	velocity = velocityCalculation(dAcc, fileName)
 	dist = distCalculation(velocity, fileName)
 	finishTime = time.time()
-        print "total time duration:\t", finishTime - startTime
+        print "total time duration:\t", finishTime - startTime, "seconds"
 
 	sys.exit(0)
 	
