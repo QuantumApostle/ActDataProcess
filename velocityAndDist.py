@@ -1,9 +1,16 @@
 import os
 import sys
+import time
 g = 9.8
 
+def printLocalTime():
+        localTime = time.asctime(time.localtime(time.time()))
+        print "\t\t\t\t", localTime
+
+#read dynamic acceleration data from file
 def readData(fileName):
 	print "Data reading begins"
+	printLocalTime()
 	dataFile = open(fileName, "r")
 	rawData = []
 	lines = dataFile.readlines()
@@ -15,11 +22,14 @@ def readData(fileName):
 			dataSet.append(float(value))
 		rawData.append(dataSet)
 	print "Data reading finishes"
+	printLocalTime()
 	return rawData
 
+#calculate the velocity
 def velocityCalculation(dAcc, fileName):
 	dataType = "Velocity"
 	print "Velocity calculation starts"
+	printLocalTime()
 	velocity = []
 	vX = 0
 	vY = 0
@@ -34,13 +44,16 @@ def velocityCalculation(dAcc, fileName):
 		velocity.append([vX, vY, vZ, t])
 	
 	#print velocity[1:100]
-	
+	print "Velocity calculation finishes"
+	printLocalTime()
 	exportToFile(fileName, dataType, velocity)
 	return velocity
 
+#calculate the distance
 def distCalculation(velocity, fileName):
 	dataType = "Dist"
 	print "Distance calculation starts"
+	printLocalTime()
 	dist = []
 	dX = 0
 	dY = 0
@@ -55,12 +68,15 @@ def distCalculation(velocity, fileName):
 		dist.append([dX, dY, dZ, t])
 	
 	#print dist[1:100]
-	
+	print "Distance calculation finishes"
+	printLocalTime()
 	exportToFile(fileName, dataType, dist)
 	return velocity
 
+#export to file
 def exportToFile(fileName, dataType, data):
 	print dataType + " exported starts."
+	printLocalTime()
 
 	newFileName = fileName[:-9] + "_" + dataType + ".dat"
 	newFile = open(newFileName, "w")
@@ -69,16 +85,19 @@ def exportToFile(fileName, dataType, data):
 			newFile.write(str(value) + " ")
 		newFile.write('\n')
 	print dataType + "exported finishes."
+	printLocalTime()
 
 if __name__ == "__main__":
+        startTime = time.time()
 	fileName = ""
 	for file in os.listdir("."):
 		if "_dAcc.dat" in str(file):
 			fileName = str(file)
 	dAcc = readData(fileName)
-	#print dAcc
 	velocity = velocityCalculation(dAcc, fileName)
 	dist = distCalculation(velocity, fileName)
+	finishTime = time.time()
+        print "total time duration:\t", finishTime - startTime
 
 	sys.exit(0)
 	
