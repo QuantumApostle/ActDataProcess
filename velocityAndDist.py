@@ -2,6 +2,7 @@ import os
 import sys
 import time
 g = 9.8
+dt = 0.025
 
 def printLocalTime():
         localTime = time.asctime(time.localtime(time.time()))
@@ -26,52 +27,38 @@ def readData(fileName):
 	return rawData
 
 #calculate the velocity
-def velocityCalculation(dAcc, fileName):
-	dataType = "Velocity"
-	print "Velocity calculation starts."
+def vDCalculation(dAcc, fileName):
+	
+	print "vd calculation starts."
 	printLocalTime()
+
 	velocity = []
 	vX = 0
 	vY = 0
 	vZ = 0
 	t = 0
-	for dataSet in dAcc:
-		vX += dataSet[0] * g * 0.025
-		vY += dataSet[1] * g * 0.025
-		vZ += dataSet[2] * g * 0.025
-		t = dataSet[3]
-		
-		velocity.append([vX, vY, vZ, t])
-	
-	#print velocity[1:100]
-	print "Velocity calculation finishes."
-	printLocalTime()
-	exportToFile(fileName, dataType, velocity)
-	return velocity
 
-#calculate the distance
-def distCalculation(velocity, fileName):
-	dataType = "Dist"
-	print "Distance calculation starts."
-	printLocalTime()
 	dist = []
 	dX = 0
 	dY = 0
 	dZ = 0
-	t = 0
-	for dataSet in velocity:
-		dX += dataSet[0] * 0.025
-		dY += dataSet[1] * 0.025
-		dZ += dataSet[2] * 0.025
-		t = dataSet[3]
+
+	for acc in dAcc:
+		vX += acc[0] * g * dt
+		vY += acc[1] * g * dt
+		vZ += acc[2] * g * dt
+		dX += vX * dt + 0.5 * acc[0] * dt * dt
+		dY += vY * dt + 0.5 * acc[1] * dt * dt
+		dZ += vZ * dt + 0.5 * acc[2] * dt * dt
+		t = acc[3]
 		
+		velocity.append([vX, vY, vZ, t])
 		dist.append([dX, dY, dZ, t])
-	
-	#print dist[1:100]
-	print "Distance calculation finishes."
+	#print velocity[1:100]
+	print "vd calculation finishes."
 	printLocalTime()
-	exportToFile(fileName, dataType, dist)
-	return velocity
+	exportToFile(fileName, "Velocity", velocity)
+	exportToFile(fileName, "Dist", dist)
 
 #export to file
 def exportToFile(fileName, dataType, data):
@@ -89,15 +76,13 @@ def exportToFile(fileName, dataType, data):
 
 if __name__ == "__main__":
         startTime = time.time()
-	fileName = ""
-	for file in os.listdir("."):
-		if "_dAcc.dat" in str(file):
-			fileName = str(file)
-	dAcc = readData(fileName)
-	velocity = velocityCalculation(dAcc, fileName)
-	dist = distCalculation(velocity, fileName)
-	finishTime = time.time()
+        fileName = ""
+        for file in os.listdir("."):
+                if "_dAcc.dat" in str(file):
+                        fileName = str(file)
+        dAcc = readData(fileName)
+        vDCalculation(dAcc, fileName)
+        finishTime = time.time()
         print "total time duration:\t", finishTime - startTime, "seconds"
-
-	sys.exit(0)
+        sys.exit(0)
 	
