@@ -4,7 +4,7 @@ import time
 
 def printLocalTime():
         localTime = time.asctime(time.localtime(time.time()))
-        print "\t\t\t\t\t\t\t", localTime
+        print "\t\t\t", localTime
 
 #Extract acceleration data from file
 def extractData(fileName):
