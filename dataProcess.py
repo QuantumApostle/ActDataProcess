@@ -8,7 +8,7 @@ def printLocalTime():
 
 #Extract acceleration data from file
 def extractData(fileName):
-	print "Data Extraction begins"
+	print "Data Extraction starts."
 	printLocalTime()
 	dataFile = open(fileName, "r")
 	extractData = []
@@ -26,7 +26,7 @@ def extractData(fileName):
 
 		dataPoint = acc + timeStamp
 		extractData.append(dataPoint)
-	print "Data Extraction finishes"
+	print "Data Extraction finishes."
 	printLocalTime()
 	exportToFile(fileName, dataType, extractData)
 	return extractData
@@ -40,7 +40,7 @@ def writeJsonFile(newData, extractedFileName):
 #calculate static acceleration
 #by averaging data in 2 seconds
 def staticAcc(rawData, fileName):
-	print "Static acceleration calculation starts"
+	print "Static acceleration calculation starts."
 	printLocalTime()
 	dataType = "sAcc"
 	meanRange = 80     #2 seconds
@@ -61,7 +61,7 @@ def staticAcc(rawData, fileName):
 		timeStamp = rawData[i][3]
 		sAcc.append([meanX, meanY, meanZ, timeStamp])
 	
-	print "Static acceleration calculation finishes"
+	print "Static acceleration calculation finishes."
 	printLocalTime()
 	exportToFile(fileName, dataType, sAcc)
 	
@@ -71,7 +71,7 @@ def staticAcc(rawData, fileName):
 #by calculate the absolute value
 #of difference between rawData and static Acc
 def dynamicAcc(rawData, staticAcc, fileName):
-	print "Dynamic acceleration calculation starts"
+	print "Dynamic acceleration calculation starts."
 	printLocalTime()
 	dAcc = []
 	dataType = "dAcc"
@@ -81,7 +81,7 @@ def dynamicAcc(rawData, staticAcc, fileName):
 		dAccZ = rawData[i][2] - staticAcc[i][2]
 		dAcc.append([dAccX, dAccY, dAccZ, staticAcc[i][3]])
 	
-	print "Dynamic acceleration calculation finishes"
+	print "Dynamic acceleration calculation finishes."
 	printLocalTime()
 	exportToFile(fileName, dataType, dAcc)
 
@@ -91,13 +91,13 @@ def dynamicAcc(rawData, staticAcc, fileName):
 #by sum up the dynamic acceleration
 def oDBA(dAcc, fileName):
 	dataType = "ODBA"
-	print "ODBA calculation starts"
+	print "ODBA calculation starts."
 	printLocalTime()
 	ODBA = []
 	for dataSet in dAcc:
 		ODBA.append([abs(dataSet[0]) + abs(dataSet[1]) + abs(dataSet[2]), dataSet[3]])
 	
-	print "ODBA calculation finishes"
+	print "ODBA calculation finishes."
 	printLocalTime()
 	exportToFile(fileName, dataType, ODBA)
 	return ODBA
