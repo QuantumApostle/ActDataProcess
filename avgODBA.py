@@ -2,6 +2,11 @@ import os
 import sys
 import time
 
+DAY_LENGTH = 86400
+HOUR_LENGTH = 3600
+MIN_LENGTH = 60
+DATA_POINT_INTERVAL = 0.025
+
 #print local time
 def printLocalTime():
 	localTime = time.asctime(time.localtime(time.time()))
@@ -26,32 +31,42 @@ def readData(fileName):
 	printLocalTime()
 	return rawData
 
+#averaging the ODBA
 def averageODBA(ODBA, fileName):
 	dataType = "avgODBA"
 	newODBA = []
+	dayODBA = []
 	avgRange = 10.0
 	avgValue = 0
 	sumValue = 0
-	count = 0
+	avgCount = 0
+	totalCount = 0
+	day = 1
 	for dataset in ODBA:
-		count += 1
-#		print "count = ", count
-#		print dataset
+		avgCount += 1
+		totalCount += 1
 		sumValue += dataset[0]
-		if count == (avgRange / 2):
-			timeStamp = dataset[1]
-#			print "timeStamp = ", timeStamp
-#		print "sumValue", sumValue
-		if count == avgRange:
+                if avgCount == (avgRange / 2):
+                        timeStamp = dataset[1]
+
+                if avgCount == avgRange:
 			avgValue = sumValue / avgRange
-			count = 0
+			avgCount = 0
 			sumValue = 0
-			newODBA.append([avgValue, timeStamp])
+			dayODBA.append([avgValue, timeStamp])
 			timeStamp = 0
-	
-#	for dataset in newODBA:
-#		print "newODBA", dataset
-	exportToFile(fileName, dataType, newODBA) 
+                if totalCount == (DAY_LENGTH / DATA_POINT_INTERVAL):
+                        totalCount = 0
+                        newODBA.append(dayODBA)
+                        dayODBA = []
+
+        newODBA.append(dayODBA)
+
+        for singleODBA in newODBA:
+                
+                exportToFile(fileName, dataType + "_day" + str(day), singleODBA)
+                day += 1
+
 	return newODBA
 
 #export to file
