@@ -33,7 +33,7 @@ def readData(fileName):
 
 #averaging the ODBA
 def averageODBA(ODBA, fileName):
-	dataType = "avgODBA"
+	dataType = "1sAvgODBA"
 	newODBA = []
 	dayODBA = []
 	avgRange = 40.0
